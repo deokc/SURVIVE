@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#151112" />
+  <title>루미나 고등학교 생존지침</title>
+  <style>
+    :root {
+      --ink: #161112;
+      --ink-soft: #2b2021;
+      --paper: #ede7db;
+      --paper-deep: #d7cdbd;
+      --paper-dim: #aaa092;
+      --wine: #9e2c38;
+      --red: #d0444d;
+      --red-soft: #ef8589;
+      --line: rgba(56, 35, 35, .19);
+      --shadow: 0 22px 55px rgba(0,0,0,.28);
+      --serif: "Iowan Old Style", "Noto Serif KR", "Batang", serif;
+      --sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+      --mono: "SFMono-Regular", Consolas, monospace;
+      --max: 1210px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(170,58,67,.23), transparent 23%),
+        radial-gradient(circle at 94% 4%, rgba(247,232,200,.11), transparent 21%),
+        linear-gradient(114deg, rgba(255,255,255,.022) 25%, transparent 25%) 0 0 / 8px 8px,
+        #171112;
+      font-family: var(--sans);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 200;
+      opacity: .14;
+      background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.18) 0, rgba(255,255,255,.18) 1px, transparent 1px, transparent 4px);
+      mix-blend-mode: overlay;
+    }
+    body.intro-open { overflow: hidden; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    img { display: block; max-width: 100%; }
+    .hidden { display: none !important; }
+    .site { min-height: 100vh; }
+    .wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+
+    /* Intro */
+    .intro {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: grid;
+      place-items: center;
+      padding: 26px;
+      overflow: hidden;
+      color: #f4eee5;
+      background: #050404;
+      transition: opacity .65s ease, visibility .65s ease;
+    }
+    .intro::before {
+      content: "";
+      position: absolute;
+      width: min(830px, 140vw);
+      height: min(830px, 140vw);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(133,20,31,.28) 0, rgba(28,8,10,.17) 37%, transparent 70%);
+      filter: blur(6px);
+      animation: breathing 5.7s ease-in-out infinite;
+    }
+    .intro::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,.55), transparent 30%, transparent 70%, rgba(0,0,0,.56));
+      pointer-events: none;
+    }
+    @keyframes breathing { 50% { transform: scale(1.08); opacity: .52; } }
+    .intro.dismiss { opacity: 0; visibility: hidden; pointer-events: none; }
+    .intro-box { width: min(770px, 100%); min-height: 212px; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .intro-lines { width: 100%; min-height: clamp(98px, 16vw, 154px); display: flex; align-items: center; justify-content: center; }
+    .intro-line { max-width: 100%; margin: 0; color: #f5efeb; font: 400 clamp(17px, 4.35vw, 46px)/1.35 var(--serif); letter-spacing: -.06em; word-break: keep-all; white-space: normal; opacity: 0; transform: translateY(7px); transition: opacity .25s ease, transform .25s ease; }
+    .intro-line.visible { opacity: 1; transform: none; }
+    .intro-line.final-line { color: #f0b7b8; }
+    .typing-caret { display: inline-block; width: 2px; height: .9em; margin-left: 7px; background: #d74a52; vertical-align: -.05em; animation: blink .75s steps(2) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .intro-enter {
+      min-width: 108px;
+      margin-top: 25px;
+      padding: 13px 17px;
+      border: 1px solid rgba(237,231,219,.5);
+      background: transparent;
+      color: #f7f0e7;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: .35s ease;
+    }
+    .intro-enter.ready { opacity: 1; transform: none; pointer-events: auto; }
+    .intro-enter:hover { background: #f7f0e7; color: #151112; }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      border-bottom: 1px solid rgba(237,231,219,.13);
+      background: rgba(21,16,17,.78);
+      backdrop-filter: blur(16px);
+    }
+    .header-inner {
+      width: min(var(--max), calc(100% - 40px));
+      min-height: 74px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #f4eee5;
+      font: 800 12px/1 var(--mono);
+      letter-spacing: .11em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); box-shadow: 0 0 15px var(--red); }
+    .tabs { display: flex; align-items: center; gap: 3px; }
+    .tab {
+      border: 0;
+      background: transparent;
+      padding: 10px 12px;
+      color: rgba(244,238,229,.54);
+      font-size: 13px;
+      font-weight: 700;
+      transition: .22s ease;
+    }
+    .tab:hover, .tab.active { color: #fff5ee; background: rgba(255,255,255,.08); }
+    .tab.active { box-shadow: inset 0 -2px 0 var(--red); }
+
+    /* Audio player */
+    .audio-player {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 196px;
+      padding: 10px 12px;
+      border: 1px solid rgba(237,231,219,.27);
+      border-radius: 999px;
+      color: #fbf4ed;
+      background: rgba(33,24,25,.86);
+      box-shadow: 0 12px 31px rgba(0,0,0,.29);
+      backdrop-filter: blur(10px);
+    }
+    .audio-play {
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      border: 1px solid rgba(245,238,229,.46);
+      border-radius: 50%;
+      background: rgba(255,255,255,.06);
+      color: inherit;
+      font-size: 12px;
+      line-height: 1;
+    }
+    .audio-label { min-width: 48px; color: rgba(251,244,237,.74); font: 800 9px/1 var(--mono); letter-spacing: .08em; }
+    .volume { width: 72px; accent-color: var(--red); }
+
+    /* Shared */
+    .view { display: none; min-height: calc(100vh - 74px); }
+    .view.active { display: block; animation: reveal .42s ease both; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .section-kicker { margin: 0 0 9px; color: var(--wine); font: 800 10px/1 var(--mono); letter-spacing: .17em; }
+    .section-title { margin: 0; color: #241819; font: 800 clamp(34px, 5vw, 56px)/.98 var(--serif); letter-spacing: -.075em; word-break: keep-all; }
+    .section-copy { max-width: 460px; margin: 0; color: #756c63; font-size: 14px; line-height: 1.8; word-break: keep-all; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+    .paper-panel {
+      border: 1px solid rgba(85,54,49,.22);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .tape { position: absolute; width: 92px; height: 27px; background: rgba(218,196,155,.55); transform: rotate(-5deg); }
+    .tape.right { right: 10%; transform: rotate(5deg); }
+    .image-frame { overflow: hidden; background: #302324; }
+    .image-frame img { width: 100%; height: 100%; object-fit: cover; }
+    .blank-image { width: 100%; height: 100%; background: linear-gradient(135deg, rgba(241,229,205,.1), rgba(113,47,52,.42)), repeating-linear-gradient(45deg, rgba(255,255,255,.04) 0 3px, transparent 3px 8px); }
+
+    /* World */
+    .world-hero {
+      position: relative;
+      min-height: 555px;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      color: #f9f1e8;
+      background: #1f1718;
+    }
+    .world-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(15,9,10,.88), rgba(15,9,10,.56) 53%, rgba(15,9,10,.88)), linear-gradient(0deg, rgba(18,12,13,.92), transparent 60%);
+      z-index: 1;
+    }
+    .world-hero-bg { position: absolute; inset: 0; }
+    .world-hero-bg img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.17) contrast(1.1) brightness(.72); }
+    .world-hero-bg .blank-image { background: radial-gradient(circle at 72% 20%, rgba(170,50,59,.52), transparent 32%), linear-gradient(125deg,#231b1d 10%,#573139 54%,#151011); }
+    .world-hero-inner { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; padding: 102px 0 70px; position: relative; z-index: 2; }
+    .world-hero .section-kicker { color: #f08a8f; }
+    .world-hero .section-title { max-width: 760px; color: #fff7ef; font-size: clamp(46px, 8vw, 96px); }
+    .world-hero .section-title.survival-title {
+      position: relative;
+      z-index: 0;
+      width: fit-content;
+      max-width: 100%;
+      margin: 0;
+      color: #fff8f0;
+      font: 700 clamp(46px, 7.2vw, 88px)/.98 var(--serif);
+      letter-spacing: -.105em;
+      text-shadow: 0 8px 24px rgba(0,0,0,.36);
+      word-break: keep-all;
+      filter: contrast(1.06);
+    }
+    .world-hero .section-title.survival-title::after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      margin-top: 25px;
+      background: linear-gradient(90deg, #d75b62 0 34%, rgba(215,91,98,.28) 34% 65%, transparent 65%);
+      animation: title-signal 4.6s steps(1,end) infinite;
+    }
+    .glitch-line {
+      position: relative;
+      display: block;
+      width: fit-content;
+      max-width: 100%;
+      isolation: isolate;
+      animation: title-flicker 6.5s steps(1,end) infinite;
+    }
+    .glitch-line + .glitch-line { margin-top: .05em; }
+    .glitch-line::before,
+    .glitch-line::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      color: #fff8f0;
+      text-shadow: none;
+    }
+    .glitch-line::before {
+      color: rgba(255, 111, 121, .88);
+      transform: translateX(-2px);
+      mix-blend-mode: screen;
+      animation: title-glitch-left 5.8s steps(1,end) infinite;
+    }
+    .glitch-line::after {
+      color: rgba(142, 194, 210, .75);
+      transform: translateX(2px);
+      mix-blend-mode: screen;
+      animation: title-glitch-right 5.8s steps(1,end) infinite;
+    }
+    .survival-title .glitch-line:nth-child(2),
+    .survival-title .glitch-line:nth-child(2)::before,
+    .survival-title .glitch-line:nth-child(2)::after { animation-delay: -.9s; }
+    .glitch-char {
+      display: inline-block;
+      position: relative;
+      z-index: 1;
+      min-width: .73em;
+      transform: translate3d(0, 0, 0);
+      transform-origin: 50% 60%;
+      will-change: transform, filter, opacity, color;
+    }
+    .glitch-gap { display: inline-block; width: .31em; }
+    .survival-title.is-scattering .glitch-char {
+      animation: glyph-disperse 820ms cubic-bezier(.2,.82,.2,1) both;
+      animation-delay: var(--delay, 0ms);
+    }
+    .survival-title.is-scattering .glitch-line::before {
+      animation: scatter-ghost-left 760ms steps(2, end) both !important;
+    }
+    .survival-title.is-scattering .glitch-line::after {
+      animation: scatter-ghost-right 760ms steps(2, end) both !important;
+    }
+    @keyframes glyph-disperse {
+      0% { opacity: 1; transform: translate3d(0,0,0) rotate(0deg) scale(1); filter: blur(0); color: inherit; }
+      16% { opacity: .78; transform: translate3d(var(--scatter-x-start), var(--scatter-y-start), 0) rotate(var(--scatter-r-start)) skewX(var(--scatter-s-start)); filter: blur(.25px); }
+      42% { opacity: .12; transform: translate3d(var(--scatter-x), var(--scatter-y), 0) rotate(var(--scatter-r)) skewX(var(--scatter-s)); filter: blur(1.6px); color: rgba(255, 218, 220, .72); }
+      63% { opacity: .72; transform: translate3d(var(--scatter-x-return), var(--scatter-y-return), 0) rotate(var(--scatter-r-return)) skewX(var(--scatter-s-return)); filter: blur(.35px); }
+      82% { opacity: .9; transform: translate3d(2px, -1px, 0) rotate(1deg); filter: blur(0); }
+      100% { opacity: 1; transform: translate3d(0,0,0) rotate(0deg) skewX(0deg); filter: blur(0); color: inherit; }
+    }
+    @keyframes scatter-ghost-left {
+      0% { opacity: 0; clip-path: inset(0 0 100% 0); transform: translateX(-2px); }
+      15% { opacity: .75; clip-path: inset(8% 0 70% 0); transform: translateX(-14px) skewX(-6deg); }
+      37% { opacity: .46; clip-path: inset(46% 0 35% 0); transform: translateX(10px); }
+      56% { opacity: .68; clip-path: inset(74% 0 7% 0); transform: translateX(-8px) skewX(4deg); }
+      75% { opacity: .18; clip-path: inset(20% 0 52% 0); transform: translateX(5px); }
+      100% { opacity: 0; clip-path: inset(0 0 100% 0); transform: translateX(-2px); }
+    }
+    @keyframes scatter-ghost-right {
+      0% { opacity: 0; clip-path: inset(100% 0 0 0); transform: translateX(2px); }
+      15% { opacity: .62; clip-path: inset(70% 0 10% 0); transform: translateX(14px) skewX(6deg); }
+      37% { opacity: .42; clip-path: inset(34% 0 49% 0); transform: translateX(-10px); }
+      56% { opacity: .72; clip-path: inset(9% 0 76% 0); transform: translateX(8px) skewX(-4deg); }
+      75% { opacity: .16; clip-path: inset(50% 0 28% 0); transform: translateX(-5px); }
+      100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: translateX(2px); }
+    }
+    @keyframes title-flicker {
+      0%, 82%, 100% { opacity: 1; transform: translate(0,0); }
+      83% { opacity: .84; transform: translate(-1px, 0); }
+      84% { opacity: 1; transform: translate(1px, 0); }
+      85% { opacity: .92; transform: translate(0, 1px); }
+      86% { opacity: 1; transform: translate(0,0); }
+      93% { opacity: .87; }
+      94% { opacity: 1; }
+    }
+    @keyframes title-glitch-left {
+      0%, 81%, 100% { opacity: 0; clip-path: inset(0 0 100% 0); transform: translateX(-2px); }
+      82% { opacity: .55; clip-path: inset(12% 0 72% 0); transform: translateX(-6px); }
+      83% { opacity: .38; clip-path: inset(47% 0 38% 0); transform: translateX(4px); }
+      84% { opacity: .74; clip-path: inset(78% 0 8% 0); transform: translateX(-3px); }
+      85% { opacity: 0; clip-path: inset(0 0 100% 0); }
+      94% { opacity: .42; clip-path: inset(31% 0 55% 0); transform: translateX(-4px); }
+      95% { opacity: 0; clip-path: inset(0 0 100% 0); }
+    }
+    @keyframes title-glitch-right {
+      0%, 81%, 100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: translateX(2px); }
+      82% { opacity: .4; clip-path: inset(72% 0 12% 0); transform: translateX(6px); }
+      83% { opacity: .7; clip-path: inset(38% 0 47% 0); transform: translateX(-4px); }
+      84% { opacity: .33; clip-path: inset(8% 0 78% 0); transform: translateX(3px); }
+      85% { opacity: 0; clip-path: inset(100% 0 0 0); }
+      94% { opacity: .5; clip-path: inset(57% 0 30% 0); transform: translateX(4px); }
+      95% { opacity: 0; clip-path: inset(100% 0 0 0); }
+    }
+    @keyframes title-signal {
+      0%, 81%, 100% { opacity: .78; transform: scaleX(1); }
+      82% { opacity: 1; transform: scaleX(.7); transform-origin: left; }
+      83% { opacity: .35; transform: scaleX(1); }
+      84% { opacity: 1; transform: scaleX(.92); transform-origin: right; }
+      85% { opacity: .78; transform: scaleX(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .glitch-line,
+      .glitch-line::before,
+      .glitch-line::after,
+      .glitch-char,
+      .world-hero .section-title.survival-title::after { animation: none !important; }
+    }
+    .world-hero .section-copy { margin-top: 26px; color: rgba(255,247,239,.74); max-width: 600px; }
+    .warning-strip { margin-top: 36px; display: inline-flex; gap: 10px; align-items: center; padding: 10px 13px; border-left: 3px solid var(--red); background: rgba(0,0,0,.26); color: rgba(255,248,241,.84); font-size: 12px; }
+    .warning-strip b { color: #ffb2b4; }
+    .world-content { padding: 92px 0 110px; background: #d6ccbd; }
+    .world-note {
+      position: relative;
+      margin-top: 35px;
+      padding: clamp(28px, 5vw, 55px);
+      min-height: 286px;
+      transform: rotate(-.35deg);
+      background:
+        linear-gradient(90deg, transparent 40px, rgba(123,89,78,.12) 41px, transparent 42px),
+        repeating-linear-gradient(180deg, transparent 0 31px, rgba(121,94,79,.13) 32px 33px),
+        #f3ebdb;
+      box-shadow: 0 18px 35px rgba(65,40,33,.18);
+    }
+    .world-note .tape { top: -12px; left: 11%; }
+    .world-note .tape.right { top: -8px; }
+    .world-note p { max-width: 900px; margin: 0; color: #2a1b1d; font: 600 clamp(24px, 3.5vw, 42px)/1.42 var(--serif); letter-spacing: -.06em; word-break: keep-all; }
+    .world-note p strong { color: var(--wine); }
+    .rule-stack { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; margin-top: 28px; }
+    .rule { position: relative; min-height: 220px; padding: 23px; border: 1px solid rgba(83,53,47,.21); background: #eee5d7; box-shadow: 0 10px 20px rgba(59,38,33,.12); transform: rotate(var(--r, 0deg)); }
+    .rule:nth-child(2) { --r: .7deg; margin-top: 18px; }
+    .rule:nth-child(3) { --r: -.55deg; }
+    .rule::after { content: attr(data-no); position: absolute; right: 17px; bottom: 6px; color: rgba(113,42,47,.11); font: 800 80px/.8 var(--serif); }
+    .rule b { display: block; color: var(--wine); font: 800 11px/1 var(--mono); letter-spacing: .1em; }
+    .rule h3 { margin: 12px 0 10px; font: 800 24px/1 var(--serif); letter-spacing: -.055em; }
+    .rule p { position: relative; z-index: 1; margin: 0; color: #675e57; font-size: 13px; line-height: 1.8; word-break: keep-all; }
+    .gallery-area { margin-top: 80px; }
+    .gallery-area .section-head { margin-bottom: 24px; }
+    .scene-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 13px; }
+    .scene-card { position: relative; min-height: 200px; padding: 0; overflow: hidden; border: 0; background: #322526; color: #fff7ef; text-align: left; box-shadow: 0 12px 20px rgba(53,31,28,.15); transition: transform .24s ease, box-shadow .24s ease; }
+    .scene-card:nth-child(3n+2) { transform: translateY(14px) rotate(.65deg); }
+    .scene-card:nth-child(3n) { transform: rotate(-.5deg); }
+    .scene-card:hover { transform: translateY(-6px) rotate(0deg); box-shadow: 0 20px 34px rgba(49,27,27,.26); z-index: 2; }
+    .scene-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(16,8,9,.9), transparent 58%); }
+    .scene-card img, .scene-card .blank-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: sepia(.18) contrast(1.04) brightness(.82); transition: transform .5s ease; }
+    .scene-card:hover img { transform: scale(1.06); }
+    .scene-number { position: absolute; z-index: 1; top: 13px; left: 14px; color: rgba(255,246,236,.72); font: 800 10px/1 var(--mono); letter-spacing: .11em; }
+    .scene-name { position: absolute; z-index: 1; left: 14px; right: 14px; bottom: 14px; font: 800 19px/1.1 var(--serif); letter-spacing: -.05em; }
+
+    /* Characters */
+    .character-view { padding: 88px 0 115px; background: #c8bca9; min-height: calc(100vh - 74px); }
+    .character-view .section-head { margin-bottom: 34px; }
+    .album {
+      position: relative;
+      padding: clamp(18px, 3vw, 38px);
+      background: linear-gradient(90deg, #52372f 0 17px, #e7ddcd 17px 100%);
+      box-shadow: 0 25px 45px rgba(55,34,29,.26);
+    }
+    .album::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: rgba(83,51,44,.19); box-shadow: 1px 0 rgba(255,255,255,.45); }
+    .grade-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; position: relative; z-index: 1; }
+    .grade-tab { padding: 8px 12px; border: 1px solid rgba(94,57,51,.28); background: #f7f0e3; color: #6c5a51; font-size: 12px; font-weight: 800; }
+    .grade-tab:hover, .grade-tab.active { border-color: var(--wine); background: var(--wine); color: #fff9f0; }
+    .portrait-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 16px; position: relative; z-index: 1; }
+    .portrait {
+      position: relative;
+      min-height: 330px;
+      padding: 10px 10px 12px;
+      border: 0;
+      background: #f6efe2;
+      color: #291d1e;
+      text-align: left;
+      box-shadow: 9px 14px 18px rgba(57,35,31,.18);
+      transform: rotate(var(--tilt, 0deg));
+      transition: .22s ease;
+    }
+    .portrait:nth-child(2n) { --tilt: -.9deg; }
+    .portrait:nth-child(3n) { --tilt: .85deg; }
+    .portrait:hover { transform: translateY(-9px) rotate(0deg); box-shadow: 13px 23px 28px rgba(48,27,26,.27); z-index: 3; }
+    .portrait::before { content: ""; position: absolute; z-index: 2; top: -7px; left: 50%; width: 14px; height: 14px; border-radius: 50%; background: #aa303a; box-shadow: inset -2px -2px 0 rgba(0,0,0,.16), 0 3px 5px rgba(0,0,0,.25); }
+    .portrait-photo { aspect-ratio: 1 / 1; overflow: hidden; background: #312526; }
+    .portrait-photo img, .portrait-photo .blank-image { width: 100%; height: 100%; object-fit: cover; filter: sepia(.1) contrast(1.05); }
+    .portrait-meta { padding: 12px 3px 0; }
+    .portrait-meta small { color: #997a6c; font: 800 9px/1 var(--mono); letter-spacing: .12em; }
+    .portrait-meta strong { display: block; margin-top: 8px; font: 800 22px/1 var(--serif); letter-spacing: -.06em; }
+    .portrait-meta span { display: block; margin-top: 4px; color: #786a62; font-size: 11px; }
+
+    /* Creatures */
+    .creature-view { min-height: calc(100vh - 74px); padding: 88px 0 110px; color: #f9efe8; background: radial-gradient(circle at 90% 10%, rgba(161,35,44,.3), transparent 26%), #171112; }
+    .creature-view .section-title { color: #fff5ed; }
+    .creature-view .section-copy { color: rgba(255,245,237,.61); }
+    .creature-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; margin-top: 35px; }
+    .creature {
+      position: relative;
+      min-height: 370px;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid rgba(250,236,224,.23);
+      background: #281c1e;
+      color: #fff8f0;
+      text-align: left;
+      transition: .25s ease;
+    }
+    .creature:hover { transform: translateY(-6px); border-color: rgba(244,215,203,.58); box-shadow: 0 22px 38px rgba(0,0,0,.32); }
+    .creature-image { position: absolute; inset: 0; }
+    .creature-image img, .creature-image .blank-image { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.28) sepia(.26) contrast(1.1) brightness(.72); }
+    .creature-image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(15,8,9,.95) 2%, rgba(22,10,12,.44) 50%, rgba(10,5,6,.15)); }
+    .creature-meta { position: absolute; z-index: 2; left: 19px; right: 19px; bottom: 19px; }
+    .creature-meta small { color: #eca4a7; font: 800 9px/1 var(--mono); letter-spacing: .14em; }
+    .creature-meta h3 { margin: 10px 0 7px; font: 800 34px/.9 var(--serif); letter-spacing: -.07em; }
+    .creature-meta p { max-width: 90%; margin: 0; color: rgba(255,243,233,.74); font-size: 12px; line-height: 1.65; word-break: keep-all; }
+    .creature-mark { position: absolute; z-index: 2; top: 15px; right: 15px; width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid rgba(255,234,225,.42); border-radius: 50%; color: rgba(255,244,236,.86); font-size: 18px; }
+
+    /* Footer message */
+    .last-message { padding: 0 0 105px; color: #f7eee5; background: #171112; }
+    .last-card { position: relative; overflow: hidden; padding: clamp(32px, 6vw, 70px); border: 1px solid rgba(251,236,222,.23); background: linear-gradient(115deg, rgba(132,34,42,.31), rgba(29,18,19,.86) 52%, rgba(42,26,25,.88)); }
+    .last-card::after { content: ""; position: absolute; top: -70px; right: -30px; width: 240px; height: 240px; border: 1px solid rgba(255,228,216,.14); border-radius: 50%; box-shadow: 0 0 0 32px rgba(255,228,216,.03), 0 0 0 64px rgba(255,228,216,.02); }
+    .last-card p { position: relative; z-index: 1; max-width: 820px; margin: 0; font: 600 clamp(24px, 4vw, 43px)/1.46 var(--serif); letter-spacing: -.06em; word-break: keep-all; }
+    .last-card span { position: relative; z-index: 1; display: block; margin-top: 23px; color: rgba(248,237,228,.63); font: 800 10px/1 var(--mono); letter-spacing: .14em; }
+    footer { padding: 28px 0 38px; color: rgba(247,238,229,.46); background: #171112; border-top: 1px solid rgba(255,245,236,.11); }
+    .footer-inner { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; display: flex; justify-content: space-between; gap: 20px; font: 10px/1.7 var(--mono); letter-spacing: .06em; }
+
+    /* Modals */
+    .modal-backdrop { position: fixed; z-index: 350; inset: 0; display: none; place-items: center; padding: 20px; background: rgba(7,4,5,.72); backdrop-filter: blur(6px); }
+    .modal-backdrop.open { display: grid; }
+    .modal { position: relative; width: min(900px, 100%); max-height: calc(100dvh - 40px); overflow: auto; box-shadow: 0 30px 80px rgba(0,0,0,.54); }
+    .modal-close { position: absolute; z-index: 3; top: 13px; right: 13px; width: 37px; height: 37px; border: 1px solid rgba(255,245,236,.5); border-radius: 50%; background: rgba(17,11,12,.56); color: #fff8ef; font-size: 23px; line-height: 1; }
+    /* Character profile: the photo stays a complete 1:1 image instead of being cropped to the text column. */
+    .person-modal {
+      width: min(1060px, 100%);
+      display: grid;
+      grid-template-columns: minmax(390px, .96fr) minmax(430px, 1.04fr);
+      align-items: center;
+      gap: 0;
+      background: #f0e8d9;
+      color: #25191a;
+    }
+    .person-modal-photo {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      align-self: center;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #21191a;
+    }
+    .person-modal-photo img, .person-modal-photo .blank-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #21191a;
+    }
+    .person-modal-body { min-width: 0; padding: 44px 46px 42px; }
+    .modal-code { color: var(--wine); font: 800 10px/1 var(--mono); letter-spacing: .14em; }
+    .modal-title { margin: 11px 0 4px; font: 800 46px/.94 var(--serif); letter-spacing: -.08em; }
+    .modal-sub { margin: 0; color: #786b62; font-size: 13px; }
+    .modal-sub:empty { display: none; }
+    .details { margin-top: 29px; }
+    .detail { padding: 14px 0; border-top: 1px solid rgba(87,55,49,.18); }
+    .detail small { display: block; color: #997262; font: 800 9px/1 var(--mono); letter-spacing: .13em; }
+    .detail p { margin: 8px 0 0; color: #51443d; font-size: 14px; line-height: 1.78; word-break: keep-all; }
+    .person-line {
+      margin: 27px 0 0;
+      padding: 17px 0 2px;
+      border-top: 1px solid rgba(87,55,49,.22);
+      color: #8a2e37;
+      font: 800 clamp(19px, 2.2vw, 25px)/1.42 var(--serif);
+      letter-spacing: -.055em;
+      word-break: keep-all;
+    }
+    .person-line::before { content: "“"; margin-right: 3px; color: #bd5158; }
+    .person-line::after { content: "”"; margin-left: 3px; color: #bd5158; }
+    .creature-modal { display: grid; grid-template-columns: .92fr 1.08fr; background: #211719; color: #fff4ec; }
+    .creature-modal-photo { min-height: 550px; background: #3e282a; }
+    .creature-modal-photo img, .creature-modal-photo .blank-image { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.24) sepia(.25) contrast(1.1); }
+    .creature-modal-body { padding: 50px 42px 35px; }
+    .creature-modal .modal-code { color: #ee9da1; }
+    .creature-modal .modal-sub { color: rgba(255,241,232,.58); }
+    .creature-modal .modal-title { color: #fff7f0; }
+    .creature-modal .detail { border-color: rgba(255,244,234,.14); }
+    .creature-modal .detail small { color: #e68d92; }
+    .creature-modal .detail p { color: rgba(255,246,238,.82); }
+    .survivor-note { margin-top: 20px; padding: 16px 17px; border-left: 3px solid var(--red); background: rgba(255,255,255,.06); }
+    .survivor-note small { color: #eda5a9; font: 800 9px/1 var(--mono); letter-spacing: .12em; }
+    .survivor-note p { margin: 9px 0 0; color: #fff1e9; font: 600 15px/1.65 var(--serif); letter-spacing: -.025em; word-break: keep-all; }
+    .counter-btn { width: 100%; margin-top: 20px; padding: 13px 16px; border: 1px solid rgba(238,143,149,.66); background: rgba(174,46,56,.19); color: #fff2eb; font-weight: 800; transition: .2s; }
+    .counter-btn:hover { background: #a52d38; }
+    .confirm-modal { width: min(470px, 100%); padding: 36px; background: #f2e9da; color: #271a1b; }
+    .confirm-modal .modal-close { background: rgba(53,31,31,.62); }
+    .confirm-icon { width: 45px; height: 45px; display: grid; place-items: center; border: 1px solid var(--wine); color: var(--wine); font: 800 25px/1 var(--serif); }
+    .confirm-modal h3 { margin: 20px 0 0; font: 800 29px/1.05 var(--serif); letter-spacing: -.06em; }
+    .confirm-modal p { margin: 13px 0 0; color: #685950; font-size: 13px; line-height: 1.75; word-break: keep-all; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 28px; }
+    .action-btn { padding: 10px 14px; border: 1px solid rgba(89,54,49,.3); background: transparent; color: #543e38; font-size: 13px; font-weight: 800; }
+    .action-btn.danger { border-color: var(--wine); background: var(--wine); color: #fff8f0; }
+    .counter-result { width: min(600px, 100%); background: #241719; color: #fff4ec; }
+    .counter-result-head { padding: 29px 33px 22px; border-bottom: 1px solid rgba(255,245,236,.16); background: linear-gradient(90deg, rgba(167,42,52,.45), transparent); }
+    .counter-result-head small { color: #f3a9ac; font: 800 9px/1 var(--mono); letter-spacing: .14em; }
+    .counter-result-head h3 { margin: 10px 0 0; font: 800 32px/1 var(--serif); letter-spacing: -.065em; }
+    .counter-result-body { padding: 30px 33px 34px; }
+    .counter-result-body p { margin: 0; color: rgba(255,245,236,.88); font-size: 15px; line-height: 1.85; word-break: keep-all; }
+    .lightbox { width: min(1000px, 100%); background: #100a0b; color: #fff5ed; }
+    .lightbox-image { max-height: min(68vh, 650px); min-height: 280px; background: #211517; }
+    .lightbox-image img, .lightbox-image .blank-image { width: 100%; height: 100%; max-height: min(68vh, 650px); object-fit: contain; }
+    .lightbox-caption { padding: 19px 25px 23px; }
+    /* Mobile scene viewer: keep the image tall and let the viewer drag sideways instead of shrinking it into empty space. */
+    @media (max-width: 680px) {
+      .lightbox {
+        width: 100%;
+        max-height: calc(100dvh - 24px);
+        overflow: hidden;
+      }
+      .lightbox-image {
+        height: min(66dvh, 560px);
+        min-height: 0;
+        max-height: none;
+        display: flex;
+        align-items: stretch;
+        overflow-x: auto;
+        overflow-y: hidden;
+        cursor: grab;
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        overscroll-behavior-x: contain;
+      }
+      .lightbox-image::-webkit-scrollbar { display: none; }
+      .lightbox-image.is-dragging { cursor: grabbing; }
+      .lightbox-image img {
+        width: auto;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        flex: 0 0 auto;
+        object-fit: contain;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+      .lightbox-image .blank-image {
+        width: 100%;
+        min-width: 100%;
+        height: 100%;
+        max-height: none;
+        flex: 0 0 auto;
+      }
+      .lightbox-caption { padding: 15px 19px 18px; }
+    }
+
+    .lightbox-caption small { color: #ef9ca1; font: 800 9px/1 var(--mono); letter-spacing: .13em; }
+    .lightbox-caption h3 { margin: 9px 0 0; font: 800 27px/1 var(--serif); letter-spacing: -.06em; }
+
+    @media (max-width: 950px) {
+      .rule-stack { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .rule:nth-child(3) { grid-column: span 2; }
+      .portrait-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .creature-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .scene-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
+    @media (max-width: 860px) {
+      .person-modal { width: min(590px, 100%); grid-template-columns: 1fr; }
+      .person-modal-photo { width: min(100%, 560px); margin: 0 auto; align-self: start; }
+      .person-modal-body { padding: 34px 30px 32px; }
+    }
+    @media (max-width: 680px) {
+      .wrap, .header-inner, .world-hero-inner, .footer-inner { width: min(var(--max), calc(100% - 28px)); }
+      .header-inner { min-height: 62px; }
+      .logo { font-size: 9px; letter-spacing: .07em; }
+      .tabs { gap: 0; }
+      .tab { padding: 9px 7px; font-size: 11px; }
+      .audio-player { right: 12px; bottom: 12px; min-width: 180px; }
+      .world-hero { min-height: 515px; }
+      .world-hero-inner { padding: 80px 0 53px; }
+      .title-copy { margin-top: 16px; font-size: clamp(60px, 20vw, 94px); }
+      .title-scratch { margin-top: 19px; }
+      .world-content, .character-view, .creature-view { padding: 66px 0 82px; }
+      .section-head { display: block; }
+      .section-copy { margin-top: 16px; }
+      .rule-stack { grid-template-columns: 1fr; }
+      .rule:nth-child(2), .rule:nth-child(3) { grid-column: auto; margin-top: 0; }
+      .scene-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+      .scene-card { min-height: 158px; }
+      .scene-card:nth-child(3n+2) { transform: none; }
+      .portrait-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 11px; }
+      .portrait { min-height: 285px; padding: 8px 8px 10px; }
+      .portrait-photo { aspect-ratio: 1 / 1; }
+      .portrait-meta strong { font-size: 19px; }
+      .creature-grid { grid-template-columns: 1fr; }
+      .creature { min-height: 335px; }
+      .person-modal, .creature-modal { grid-template-columns: 1fr; }
+      .person-modal { width: min(100%, 560px); }
+      .person-modal-photo { width: 100%; aspect-ratio: 1 / 1; min-height: 0; max-height: none; }
+      .creature-modal-photo { min-height: 320px; max-height: 420px; }
+      .person-modal-body, .creature-modal-body { padding: 34px 26px 29px; }
+      .modal-title { font-size: 39px; }
+      .modal-backdrop { padding: 12px; }
+      .confirm-modal { padding: 28px; }
+      .footer-inner { display: block; }
+      .footer-inner span + span { display: block; margin-top: 8px; }
+    }
+  </style>
+</head>
+<body class="intro-open">
+  <div class="intro" id="intro" aria-label="인트로">
+    <div class="intro-box">
+      <div class="intro-lines" id="introLines" aria-live="polite"></div>
+      <button class="intro-enter" id="enterSite" type="button">열람하기</button>
+    </div>
+  </div>
+
+  <div class="site">
+    <header class="header">
+      <div class="header-inner">
+        <a class="logo" href="#" id="homeButton"><span class="logo-dot"></span>루미나 고등학교 생존지침</a>
+        <nav class="tabs" aria-label="기록 카테고리">
+          <button class="tab active" type="button" data-view="world">세계관</button>
+          <button class="tab" type="button" data-view="characters">등장인물</button>
+          <button class="tab" type="button" data-view="creatures">크리처 도감</button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="view active" id="world" aria-labelledby="worldTitle">
+        <div class="world-hero">
+          <div class="world-hero-bg" id="worldHeroImage"></div>
+          <div class="world-hero-inner">
+            <h1 class="section-title survival-title" id="worldTitle" aria-label="루미나 고등학교 생존지침">
+              <span class="glitch-line" data-text="루미나 고등학교" aria-hidden="true">
+                <span class="glitch-char" style="--i:0">루</span><span class="glitch-char" style="--i:1">미</span><span class="glitch-char" style="--i:2">나</span><span class="glitch-gap"> </span><span class="glitch-char" style="--i:3">고</span><span class="glitch-char" style="--i:4">등</span><span class="glitch-char" style="--i:5">학</span><span class="glitch-char" style="--i:6">교</span>
+              </span>
+              <span class="glitch-line" data-text="생존지침" aria-hidden="true">
+                <span class="glitch-char" style="--i:7">생</span><span class="glitch-char" style="--i:8">존</span><span class="glitch-char" style="--i:9">지</span><span class="glitch-char" style="--i:10">침</span>
+              </span>
+            </h1>
+          </div>
+        </div>
+
+        <div class="world-content">
+          <div class="wrap">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">학교의 규칙</h2>
+              </div>
+              <p class="section-copy">정문과 비상구, 창문까지. 모든 탈출 경로는 다시 교내로 이어진다. 정상적인 출구는 학교의 폐쇄가 풀릴 때만 나타난다.</p>
+            </div>
+
+            <div class="world-note">
+              <span class="tape"></span><span class="tape right"></span>
+              <p>크리처를 전부 없애야 하는 게 아니다. <strong>각자의 규칙을 깨고, 이상해진 장소를 되돌리고, 학교 전체에 걸린 폐쇄를 풀어야 한다.</strong> 그래야 진짜 출구가 모습을 드러낸다.</p>
+            </div>
+
+            <div class="rule-stack">
+              <article class="rule" data-no="01"><b>폐쇄 규칙</b><h3>나가는 길은 모두 학교로 돌아온다.</h3><p>정문, 후문, 비상구, 창문. 어디로 나가도 낯선 복도와 계단으로 이어진다. 학교 밖은 존재하지 않는 것처럼 보인다.</p></article>
+              <article class="rule" data-no="02"><b>파훼법</b><h3>무적은 없다.</h3><p>모든 크리처는 특정 행동, 물건, 소리, 환경에 반응한다. 그 규칙을 모른 채 마주치는 건, 운에 목숨을 맡기는 일이다.</p></article>
+              <article class="rule" data-no="03"><b>정상화</b><h3>해결할수록 학교가 돌아온다.</h3><p>닫혀 있던 계단이 열리고, 사라진 교실이 나타난다. 때로는 방송에서 누군가 탈출에 관한 문장을 흘린다.</p></article>
+            </div>
+
+            <div class="gallery-area">
+              <div class="section-head">
+                <div><p class="section-kicker">학교 안의 장면들</p><h2 class="section-title">돌아갈 수 없는 장소</h2></div>
+              </div>
+              <div class="scene-grid" id="sceneGrid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="characters" aria-labelledby="characterTitle">
+        <div class="character-view">
+          <div class="wrap">
+            <div class="section-head">
+              <div><h2 class="section-title" id="characterTitle">등장인물</h2></div>
+            </div>
+            <div class="album">
+              <div class="grade-tabs" id="gradeTabs"></div>
+              <div class="portrait-grid" id="portraitGrid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="creatures" aria-labelledby="creatureTitle">
+        <div class="creature-view">
+          <div class="wrap">
+            <div class="section-head">
+              <div><h2 class="section-title" id="creatureTitle">크리처 도감</h2></div>
+            </div>
+            <div class="creature-grid" id="creatureGrid"></div>
+          </div>
+        </div>
+
+        <div class="last-message">
+          <div class="wrap">
+            <div class="last-card">
+              <p>이 기록을 읽고 있다면, 너도 아직 학교 안에 있다는 뜻이겠지. 혼자 가지 마. 그리고 누가 네 이름을 불러도… 먼저 얼굴을 확인해.</p>
+              <span>— 이름을 남기지 못한 생존자</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner"><span>루미나 고등학교 생존지침</span><span>학교 안에서 남긴 기록</span></div>
+    </footer>
+  </div>
+
+  <div class="audio-player" aria-label="배경 음악 재생기">
+    <button class="audio-play" id="audioPlay" type="button" aria-label="배경 음악 재생">▶</button>
+    <span class="audio-label" id="audioLabel">BGM OFF</span>
+    <input class="volume" id="volume" type="range" min="0" max="1" step="0.01" value="0.35" aria-label="배경 음악 볼륨" />
+    <audio id="bgm" loop preload="metadata"></audio>
+  </div>
+
+  <div class="modal-backdrop" id="personModal" role="dialog" aria-modal="true" aria-label="학생 상세 정보">
+    <div class="modal person-modal">
+      <button class="modal-close" type="button" data-close="personModal" aria-label="닫기">×</button>
+      <div class="person-modal-photo" id="personModalImage"></div>
+      <div class="person-modal-body">
+        <span class="modal-code" id="personCode"></span>
+        <h3 class="modal-title" id="personName"></h3>
+        <p class="modal-sub" id="personSub"></p>
+        <div class="details">
+          <div class="detail"><small>외형</small><p id="personAppearance"></p></div>
+          <div class="detail"><small>성격</small><p id="personPersonality"></p></div>
+        </div>
+        <p class="person-line" id="personLine"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="creatureModal" role="dialog" aria-modal="true" aria-label="크리처 상세 정보">
+    <div class="modal creature-modal">
+      <button class="modal-close" type="button" data-close="creatureModal" aria-label="닫기">×</button>
+      <div class="creature-modal-photo" id="creatureModalImage"></div>
+      <div class="creature-modal-body">
+        <span class="modal-code" id="creatureCode"></span>
+        <h3 class="modal-title" id="creatureName"></h3>
+        <p class="modal-sub" id="creatureSub"></p>
+        <div class="details">
+          <div class="detail"><small>행동 기록</small><p id="creatureDescription"></p></div>
+        </div>
+        <div class="survivor-note"><small>낙서된 메모</small><p id="creatureComment"></p></div>
+        <button class="counter-btn" id="requestCounter" type="button">파훼법 기록 열람</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="confirmModal" role="dialog" aria-modal="true" aria-label="파훼법 확인">
+    <div class="modal confirm-modal">
+      <button class="modal-close" type="button" data-close="confirmModal" aria-label="닫기">×</button>
+      <div class="confirm-icon">!</div>
+      <h3>파훼법을 확인하시겠습니까?</h3>
+      <p><strong id="confirmName"></strong>의 파훼법 기록을 열람합니다.</p>
+      <div class="modal-actions"><button class="action-btn" type="button" data-close="confirmModal">취소</button><button class="action-btn danger" id="confirmCounter" type="button">확인</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="counterModal" role="dialog" aria-modal="true" aria-label="파훼법 상세">
+    <div class="modal counter-result">
+      <button class="modal-close" type="button" data-close="counterModal" aria-label="닫기">×</button>
+      <div class="counter-result-head"><small>생존 규칙 확인</small><h3 id="counterName"></h3></div>
+      <div class="counter-result-body"><p id="counterText"></p></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="sceneModal" role="dialog" aria-modal="true" aria-label="배경 이미지 상세">
+    <div class="modal lightbox">
+      <button class="modal-close" type="button" data-close="sceneModal" aria-label="닫기">×</button>
+      <div class="lightbox-image" id="sceneModalImage"></div>
+      <div class="lightbox-caption"><small id="sceneCode"></small><h3 id="sceneTitle"></h3></div>
+    </div>
+  </div>
+
+  <script>
+    /* GitHub raw 링크를 아래 값에 넣으면 됩니다. */
+    const ASSET_BASE = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPOSITORY/main/assets/";
+    const ASSETS = {
+      bgm: "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/cr.mp3",
+      hero: "",
+      characters: {
+        "서주희": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%84%9C%EC%A3%BC%ED%9D%AC.jpg",
+        "이도윤": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%9D%B4%EB%8F%84%EC%9C%A4.jpg",
+        "문현석": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%AC%B8%ED%98%84%EC%84%9D.jpg",
+        "박은찬": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%B0%95%EC%9D%80%EC%B0%AC.jpg",
+        "도연우": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%8F%84%EC%97%B0%EC%9A%B0.jpg",
+        "윤해솔": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%9C%A4%ED%95%B4%EC%86%94.jpg",
+        "차혜지": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%B0%A8%ED%98%9C%EC%A7%80.jpg",
+        "사토 유키": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%82%AC%ED%86%A0%20%EC%9C%A0%ED%82%A4.jpg",
+        "공해영": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EA%B3%B5%ED%95%B4%EC%98%81.jpg",
+        "김도겸": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EA%B9%80%EB%8F%84%EA%B2%B8.jpg"
+      },
+      creatures: {
+        "사일런서": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%82%AC%EC%9D%BC%EB%9F%B0%EC%84%9C_%EA%B8%B0%EB%B3%B8.jpg",
+        "시선 고정자": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%8B%9C%EC%84%A0%20%EA%B3%A0%EC%A0%95%EC%9E%90_%EA%B8%B0%EB%B3%B8.jpg",
+        "매쓰": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%A7%A4%EC%93%B0_%EA%B8%B0%EB%B3%B8.jpg",
+        "스티치": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%8A%A4%ED%8B%B0%EC%B9%98_%EA%B8%B0%EB%B3%B8.jpg",
+        "모노크롬": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%AA%A8%EB%85%B8%ED%81%AC%EB%A1%AC_%EA%B8%B0%EB%B3%B8.jpg",
+        "조율자": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%A1%B0%EC%9C%A8%EC%9E%90_%EA%B8%B0%EB%B3%B8.jpg",
+        "공백": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EA%B3%B5%EB%B0%B1_%EA%B8%B0%EB%B3%B8.jpg",
+        "길잡이": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EA%B8%B8%EC%9E%A1%EC%9D%B4_%EA%B8%B0%EB%B3%B8.jpg",
+        "핀홀": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%ED%95%80%ED%99%80_%EA%B8%B0%EB%B3%B8.jpg",
+        "리와인드": "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%A6%AC%EC%99%80%EC%9D%B8%EB%93%9C_%EA%B8%B0%EB%B3%B8.jpg"
+      },
+      backgrounds: [
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EA%B3%84%EB%8B%A8.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EA%B3%BC%ED%95%99%EC%8B%A4.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EA%B5%90%EC%8B%A4.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EA%B8%89%EC%8B%9D%EC%8B%A4.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%8F%84%EC%84%9C%EC%8B%A4.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%B0%A9%EC%86%A1%EC%8B%A4.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%B3%B4%EA%B1%B4%EC%8B%A4.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EB%B3%B5%EB%8F%84.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%98%A5%EC%83%81.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%9D%8C%EC%95%85%EC%8B%A4.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%EC%B2%B4%EC%9C%A1%EA%B4%80.jpg",
+        "https://raw.githubusercontent.com/deokc/SURVIVE/refs/heads/main/%ED%99%94%EC%9E%A5%EC%8B%A4.jpg"
+      ]
+    };
+
+    const characters = [
+      { name:"서주희", gender:"여", age:19, grade:"3학년", appearance:"흑발 장발, 적안.", personality:"카리스마 있고 완벽주의적이다. 간혹 공리주의적인 판단을 내릴 만큼 냉혹해질 수 있다.", line:"울고 있을 시간 없어. 살릴 수 있는 쪽부터 골라." },
+      { name:"이도윤", gender:"남", age:19, grade:"3학년", appearance:"백발, 녹안.", personality:"조용하고 자기주장이 적다. 늘 한발 물러서서 주변을 세심하게 살핀다.", line:"아… 내가 할게. 그러니까, 거기서 움직이지 마." },
+      { name:"문현석", gender:"남", age:19, grade:"3학년", appearance:"남색 머리, 회안.", personality:"예민하고 논리적이다. 승부욕이 강하며, 감정보다 사실과 결과를 우선한다.", line:"아니, 그건 추측이고. 증거는 여기 있잖아." },
+      { name:"박은찬", gender:"남", age:19, grade:"3학년", appearance:"회색 머리, 청록안, 검정 마스크.", personality:"충동적이고 다혈질이다. 입이 험하며, 위기에는 앞장서서 몸으로 막는다.", line:"하아, 씨발.. 뒤로 가 있어." },
+      { name:"도연우", gender:"여", age:19, grade:"3학년", appearance:"흑발 숏컷, 벽안.", personality:"보이쉬하고 털털하다. 고민보다 행동이 빠르다.", line:"일단 뛰어. 설명은 살고 나서 듣자." },
+      { name:"윤해솔", gender:"여", age:18, grade:"2학년", appearance:"연갈색 양갈래, 갈안.", personality:"상냥하고 다정하며 낯가림이 적다.", line:"괜찮아. 혼자 아니야, 내가 옆에 있잖아." },
+      { name:"차혜지", gender:"여", age:18, grade:"2학년", appearance:"갈색 단발, 흑안.", personality:"겁이 많고 불안이 심하다. 위험이 닥치면 자신부터 살기 위해 남을 버리거나 거짓말할 수 있다.", line:"미안해… 나도 살고 싶었단 말이야." },
+      { name:"사토 유키", gender:"여", age:18, grade:"2학년", appearance:"회색 포니테일, 자안.", personality:"말수가 적고 질문이 많다. 쿨하고 현실적이며 감정 표현은 서툰편이다.", line:"다친 사람부터 옮기겠습니다." },
+      { name:"공해영", gender:"여", age:17, grade:"1학년", appearance:"분홍 머리 장발, 분홍안.", personality:"까칠하고 자존심이 강하다. 더럽거나 지저분한 것을 질색하며, 무서워도 티를 안내려 한다.", line:"뭐.. 뭐가! 하나도 안 무섭거든?!" },
+      { name:"김도겸", gender:"남", age:17, grade:"1학년", appearance:"흑발, 흑안.", personality:"음침하고 낯을 많이 가린다. 사람 많은 곳을 불편해하며 혼자 있는 것을 선호한다.", line:"이상한… 소리 들려." }
+    ];
+
+    const creatures = [
+      { name:"사일런서", type:"절지동물형", description:"거대한 귀뚜라미나 메뚜기를 닮은 개체. 청각이 극도로 발달해 아주 작은 소리에도 반응하며 벼락같이 덮친다.", counter:"완전한 침묵이 답이 아니다. 소화전 경보음이나 방송실 스피커처럼 일정 데시벨 이상의 연속적인 소음을 발생시키면 방향을 잡지 못하고 괴로워하며 물러난다.", comment:"미친.. 이렇게 큰 메뚜기는 처음 봐.. 발소리 한 번 났는데… 고개가 이쪽으로 확 돌아갔어. 잠깐, 지금 엄청난 속도로 달려ㅇㅗㄴㅡ..!" },
+      { name:"시선 고정자", type:"인간형", description:"눈코입이 없는 사람 형상의 개체. ‘눈이 마주쳤다고 인식’한 대상의 몸을 서서히 굳게 만들며, 인식된 대상을 집요하게 추적한다.", counter:"거울이나 스마트폰 액정처럼 반사되는 물건으로 시선을 반사시켜야 한다. 개체가 자기 자신을 인식하면, 스스로 몸이 굳어버린다.", comment:"얼굴이 없는데 왜 시선이 느껴지는 거야? 고개를 돌렸는데도 계속. 손끝이 안 움직여. 누가 장난치는 거지? 제발 장난이라고 해 줘." },
+      { name:"매쓰", type:"인간형", description:"얼굴이 책인 인간형 개체. 대상 한 명에게 수학 문제를 내며, 제한시간 안에 맞히지 못하면 빨간 X를 새긴다. X가 세 개가 되면 대상은 부서져 사라진다.", counter:"문제의 답만 푸는 것이 아니다. 식 안의 모순이나 빠진 조건을 찾아 ‘답을 정할 수 없다’고 논리적으로 증명해야 한다. 매쓰는 정답보다 논리적 오류에 약하다.", comment:"씨발..! 난 수학 같은 거 모른다고!! 근데.. 어째서 내 몸에 X들이 생기는 거야? 아무리 문질러도 지워지지 않아." },
+      { name:"스티치", type:"거미형", description:"같은 물건을 짧은 시간 안에 만진 두 사람의 몸을 보이지 않는 실로 꿰맨다. 한 명이 움직이면 다른 한 명도 끌려가고, 반대 방향으로 버티면 관절이 찢어진다.", counter:"연결된 둘만으로 해결하지 마라. 세 번째 학생까지 같은 물건을 만지게 해야 한다. 스티치는 정확히 두 사람만 연결할 수 있어, 세 명의 움직임을 계산하지 못하고 실이 끊어진다.", comment:"미친 거미가 천장에 붙어 있었어. 아니, 거미가 아니라… 너무 컸어. 누가 옆에서 비명 지르는데 몸이 마음대로 끌려갔어. 아무것도 안 보여." },
+      { name:"모노크롬", type:"인간형", description:"온몸이 잿빛 물감처럼 흐르는 개체. 공간에서 특정 색 하나를 지우며, 그 색을 입거나 가진 학생은 인식에서 흐려져 마침내 누구도 기억하지 못하게 된다.", counter:"사라진 색의 보색 조명을 비춰 색을 강제로 되돌려야 한다. 비상용 색 필름, 프로젝터, 휴대전화 화면 등을 이용할 수 있으며, 색이 번진 모노크롬의 형태는 무너진다.", comment:"분명 네 명이었는데 사진에는 세 명만 있어. 내가 잘못 센 거겠지. 근데 가방은 네 개야. 이 분홍색 가방 누구 거야. 왜 아무도 기억을 못 해." },
+      { name:"조율자", type:"음악실 개체", description:"지휘봉을 든 인간형 개체. 음악실의 박자를 지배해 ‘똑, 딱’ 간격에 맞춰서만 움직이게 한다. 박자를 어기면 보이지 않는 힘이 몸을 비튼다.", counter:"박자를 따르지 말고 음악 자체를 파괴해야 한다. 피아노, 드럼 등 악기를 마구 연주해 불협화음을 만들면 조화로운 박자가 깨지고 조율자는 괴로워하며 멈춘다.", comment:"똑. 딱. 똑. 딱. 멈추면 안 될 것 같아서 계속 걸었어. 다리가 내 다리 같지가 않아. 멈추고 싶어. 누가 제발 도와줘..." },
+      { name:"공백", type:"그림자형", description:"책상, 의자, 캐비닛 등 특정 가구의 그림자 속에 숨어 있다. 그림자 영역을 밟은 학생의 신체 일부를 경계선 그대로 지워 버린다.", counter:"빛을 없애 그림자 자체를 지워야 한다. 손전등을 끄고 창문을 가려 그림자를 사라지게 만들면, 공백은 존재할 기반을 잃고 다른 장소로 이동한다.", comment:"바닥이 이상했어. 그냥 그림자인 줄 알았는데. 발끝이 닿자마자 푹 꺼졌어. 피도 없고 아프지도 않은데… 내 발.. 어디 갔어?" },
+      { name:"길잡이", type:"전선 덩어리형", description:"천장에 매달린 전선과 케이블의 덩어리. 여러 전선 끝을 내밀어 올바른 탈출 경로를 고르라고 강요하며, 틀린 전선은 감전사 혹은 위험 구역 이동으로 이어진다.", counter:"정답은 가장 낡고 해진 전선이다. 길잡이는 학교 전력 시스템과 연결되어 있어 전력이 가장 약하게 흐르는 오래된 선만이 안전 통로다. 새것처럼 깨끗한 선일수록 함정이다.", comment:"천장에서 전선이 내려왔어. 잡으라고, 빨리 잡으라고 누가 귓가에서 속삭이는 것 같았어." },
+      { name:"핀홀", type:"구멍형", description:"벽이나 사물함 틈에 생기는 작은 구멍. 안쪽은 아무리 빛을 비춰도 끝이 보이지 않으며, 가까이 들여다보는 사람의 눈을 바늘이나 녹슨 못으로 찌른다.", counter:"구멍을 직접 막지 말고, 거울이나 휴대전화 카메라로 멀리서 내부를 비춰야 한다. 핀홀은 사람의 눈이 가까이 있어야 공격할 수 있으므로 렌즈에는 반응하지 못한다.", comment:"벽에 구멍이 뚫려 있었어. 학교에 이런 구멍이 있었나? 안을 보면 안 될 것 같은데… 자꾸 보게 돼." },
+      { name:"리와인드", type:"노이즈 인간형", description:"방송 노이즈처럼 지직거리며 일그러져 보이는 인간형 개체. 말을 걸지만 내용은 거꾸로 들리며, 직접 목소리를 들은 학생은 일시적인 언어 인지 장애에 빠진다.", counter:"글자를 이용해야 한다. 하고 싶은 말을 칠판이나 종이에 거꾸로 써서 보여준다. 단, ‘멈춰’, ‘물러나’처럼 짧은 행동 명령만 통하며 소멸시키는 명령은 통하지 않는다.", comment:"어싶고살.. 어싶고살.. 쳐망도.. 쳐망도.. 뜻은 모르겠는데, 듣고 있으면 머리가 이상해져." }
+    ];
+
+    const scenes = ["계단", "과학실", "교실", "급식실", "도서실", "방송실", "보건실", "복도", "옥상", "음악실", "체육관", "화장실"];
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+    const escapeHTML = (value) => String(value).replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[char]));
+    const imageHTML = (url, alt, className = "") => url ? `<img class="${className}" src="${escapeHTML(url)}" alt="${escapeHTML(alt)}" loading="lazy" onerror="this.remove()">` : `<div class="blank-image ${className}" aria-hidden="true"></div>`;
+
+    function setMedia(target, url, alt) {
+      target.innerHTML = imageHTML(url, alt);
+    }
+
+    function showView(id) {
+      $$(".view").forEach(view => view.classList.toggle("active", view.id === id));
+      $$(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.view === id));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    $$(".tab").forEach(tab => tab.addEventListener("click", () => showView(tab.dataset.view)));
+    $("#homeButton").addEventListener("click", event => { event.preventDefault(); showView("world"); });
+
+    function renderWorld() {
+      setMedia($("#worldHeroImage"), ASSETS.hero || ASSETS.backgrounds[7], "루미나 고등학교");
+      $("#sceneGrid").innerHTML = scenes.map((scene, index) => `
+        <button class="scene-card" type="button" data-scene="${index}" aria-label="${escapeHTML(scene)} 자세히 보기">
+          ${imageHTML(ASSETS.backgrounds[index], `${scene} 이미지`)}
+          <span class="scene-number">SCENE ${String(index + 1).padStart(2, "0")}</span>
+          <span class="scene-name">${escapeHTML(scene)}</span>
+        </button>`).join("");
+      $$("[data-scene]").forEach(button => button.addEventListener("click", () => openScene(Number(button.dataset.scene))));
+    }
+
+    function renderCharacterTabs() {
+      const grades = ["전체", "3학년", "2학년", "1학년"];
+      $("#gradeTabs").innerHTML = grades.map((grade, index) => `<button class="grade-tab ${index === 0 ? "active" : ""}" type="button" data-grade="${grade}">${grade}</button>`).join("");
+      $$(".grade-tab").forEach(button => button.addEventListener("click", () => {
+        $$(".grade-tab").forEach(item => item.classList.toggle("active", item === button));
+        renderCharacters(button.dataset.grade);
+      }));
+    }
+
+    function renderCharacters(grade = "전체") {
+      const visible = grade === "전체" ? characters : characters.filter(person => person.grade === grade);
+      $("#portraitGrid").innerHTML = visible.map((person, index) => `
+        <button class="portrait" type="button" data-person="${escapeHTML(person.name)}" aria-label="${escapeHTML(person.name)} 상세 정보">
+          <div class="portrait-photo">${imageHTML(ASSETS.characters[person.name], `${person.name} 이미지`)}</div>
+          <div class="portrait-meta"><small>PHOTO ${String(index + 1).padStart(2, "0")} · ${escapeHTML(person.grade)}</small><strong>${escapeHTML(person.name)}</strong><span>${escapeHTML(person.gender)} · ${person.age}세</span></div>
+        </button>`).join("");
+      $$("[data-person]").forEach(button => button.addEventListener("click", () => openPerson(button.dataset.person)));
+    }
+
+    function openPerson(name) {
+      const person = characters.find(item => item.name === name);
+      if (!person) return;
+      setMedia($("#personModalImage"), ASSETS.characters[name], `${name} 이미지`);
+      $("#personCode").textContent = `STUDENT PHOTO · ${person.grade}`;
+      $("#personName").textContent = person.name;
+      $("#personSub").textContent = `${person.gender} · ${person.age}세`;
+      $("#personAppearance").textContent = person.appearance;
+      $("#personPersonality").textContent = person.personality;
+      $("#personLine").textContent = person.line;
+      openModal("personModal");
+    }
+
+    let currentCreature = null;
+    function renderCreatures() {
+      $("#creatureGrid").innerHTML = creatures.map((creature, index) => `
+        <button class="creature" type="button" data-creature="${escapeHTML(creature.name)}" aria-label="${escapeHTML(creature.name)} 상세 정보">
+          <div class="creature-image">${imageHTML(ASSETS.creatures[creature.name], `${creature.name} 이미지`)}</div>
+          <span class="creature-mark">+</span>
+          <div class="creature-meta"><small>ENTITY ${String(index + 1).padStart(2, "0")} · ${escapeHTML(creature.type)}</small><h3>${escapeHTML(creature.name)}</h3><p>${escapeHTML(creature.description)}</p></div>
+        </button>`).join("");
+      $$("[data-creature]").forEach(button => button.addEventListener("click", () => openCreature(button.dataset.creature)));
+    }
+
+    function openCreature(name) {
+      currentCreature = creatures.find(item => item.name === name);
+      if (!currentCreature) return;
+      setMedia($("#creatureModalImage"), ASSETS.creatures[name], `${name} 이미지`);
+      $("#creatureCode").textContent = `ENTITY RECORD · ${currentCreature.type}`;
+      $("#creatureName").textContent = currentCreature.name;
+      $("#creatureSub").textContent = "";
+      $("#creatureDescription").textContent = currentCreature.description;
+      $("#creatureComment").textContent = currentCreature.comment;
+      openModal("creatureModal");
+    }
+
+    $("#requestCounter").addEventListener("click", () => {
+      if (!currentCreature) return;
+      $("#confirmName").textContent = currentCreature.name;
+      openModal("confirmModal");
+    });
+
+    $("#confirmCounter").addEventListener("click", () => {
+      if (!currentCreature) return;
+      closeModal("confirmModal");
+      closeModal("creatureModal");
+      $("#counterName").textContent = currentCreature.name;
+      $("#counterText").textContent = currentCreature.counter;
+      openModal("counterModal");
+    });
+
+    function openScene(index) {
+      const sceneImage = $("#sceneModalImage");
+      sceneImage.classList.remove("is-dragging");
+      sceneImage.scrollLeft = 0;
+      setMedia(sceneImage, ASSETS.backgrounds[index], `${scenes[index]} 이미지`);
+      requestAnimationFrame(() => { sceneImage.scrollLeft = 0; });
+      $("#sceneCode").textContent = `SCENE ${String(index + 1).padStart(2, "0")}`;
+      $("#sceneTitle").textContent = scenes[index];
+      openModal("sceneModal");
+    }
+
+    function initSceneImageDrag() {
+      const viewer = $("#sceneModalImage");
+      if (!viewer) return;
+      let activePointer = null;
+      let startX = 0;
+      let startScroll = 0;
+
+      const canDrag = () => window.matchMedia("(max-width: 680px)").matches && viewer.scrollWidth > viewer.clientWidth + 2;
+      const stopDragging = (event) => {
+        if (activePointer === null) return;
+        if (event && event.pointerId !== activePointer) return;
+        if (viewer.hasPointerCapture?.(activePointer)) viewer.releasePointerCapture(activePointer);
+        activePointer = null;
+        viewer.classList.remove("is-dragging");
+      };
+
+      viewer.addEventListener("pointerdown", (event) => {
+        if (!canDrag()) return;
+        activePointer = event.pointerId;
+        startX = event.clientX;
+        startScroll = viewer.scrollLeft;
+        viewer.setPointerCapture?.(activePointer);
+        viewer.classList.add("is-dragging");
+        event.preventDefault();
+      });
+
+      viewer.addEventListener("pointermove", (event) => {
+        if (activePointer === null || event.pointerId !== activePointer) return;
+        viewer.scrollLeft = startScroll - (event.clientX - startX);
+      });
+
+      viewer.addEventListener("pointerup", stopDragging);
+      viewer.addEventListener("pointercancel", stopDragging);
+      viewer.addEventListener("lostpointercapture", () => stopDragging());
+      viewer.addEventListener("dragstart", (event) => {
+        if (event.target instanceof HTMLImageElement) event.preventDefault();
+      });
+    }
+
+    function openModal(id) {
+      $("#" + id).classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal(id) {
+      $("#" + id).classList.remove("open");
+      if (!$$(".modal-backdrop.open").length && !$("#intro").classList.contains("dismiss")) return;
+      if (!$$(".modal-backdrop.open").length) document.body.style.overflow = "";
+    }
+    $$('[data-close]').forEach(button => button.addEventListener("click", () => closeModal(button.dataset.close)));
+    $$(".modal-backdrop").forEach(backdrop => backdrop.addEventListener("click", event => { if (event.target === backdrop) closeModal(backdrop.id); }));
+    document.addEventListener("keydown", event => { if (event.key === "Escape") $$(".modal-backdrop.open").forEach(modal => closeModal(modal.id)); });
+
+    function initAudio() {
+      const bgm = $("#bgm");
+      const play = $("#audioPlay");
+      const label = $("#audioLabel");
+      const volume = $("#volume");
+      bgm.src = ASSETS.bgm;
+      bgm.volume = Number(volume.value);
+      const update = () => {
+        const active = !bgm.paused && !!ASSETS.bgm;
+        play.textContent = active ? "❚❚" : "▶";
+        play.setAttribute("aria-label", active ? "배경 음악 일시정지" : "배경 음악 재생");
+        label.textContent = active ? "BGM ON" : "BGM OFF";
+      };
+      play.addEventListener("click", async () => {
+        if (!ASSETS.bgm) return;
+        try { bgm.paused ? await bgm.play() : bgm.pause(); } catch (error) { console.warn("BGM을 재생할 수 없습니다.", error); }
+        update();
+      });
+      volume.addEventListener("input", () => { bgm.volume = Number(volume.value); });
+      bgm.addEventListener("play", update);
+      bgm.addEventListener("pause", update);
+      bgm.addEventListener("ended", update);
+      update();
+    }
+
+    async function playBgm() {
+      const bgm = $("#bgm");
+      if (!ASSETS.bgm || !bgm.paused) return;
+      try {
+        await bgm.play();
+      } catch (error) {
+        console.warn("BGM을 재생할 수 없습니다.", error);
+      }
+    }
+
+    function initFirstInteractionBgm() {
+      let hasStarted = false;
+
+      const startOnFirstInteraction = (event) => {
+        if (hasStarted) return;
+        // 재생 버튼 자체는 원래의 재생/일시정지 동작을 그대로 사용합니다.
+        if (event?.target?.closest?.("#audioPlay")) return;
+
+        hasStarted = true;
+        playBgm();
+        document.removeEventListener("pointerdown", startOnFirstInteraction, true);
+        document.removeEventListener("keydown", startOnFirstInteraction, true);
+      };
+
+      // 모바일 터치·마우스 클릭·키보드 첫 입력 모두 BGM 재생의 사용자 제스처로 인식됩니다.
+      document.addEventListener("pointerdown", startOnFirstInteraction, true);
+      document.addEventListener("keydown", startOnFirstInteraction, true);
+    }
+
+    function initTitleScatter() {
+      const title = document.querySelector(".survival-title");
+      if (!title || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const chars = [...title.querySelectorAll(".glitch-char")];
+      if (!chars.length) return;
+
+      const scatter = () => {
+        chars.forEach((char, index) => {
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 18 + Math.random() * 52;
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance * .62;
+          const rotation = -18 + Math.random() * 36;
+          const skew = -10 + Math.random() * 20;
+          char.style.setProperty("--scatter-x", `${x.toFixed(1)}px`);
+          char.style.setProperty("--scatter-y", `${y.toFixed(1)}px`);
+          char.style.setProperty("--scatter-r", `${rotation.toFixed(1)}deg`);
+          char.style.setProperty("--scatter-s", `${skew.toFixed(1)}deg`);
+          char.style.setProperty("--scatter-x-start", `${(x * -.18).toFixed(1)}px`);
+          char.style.setProperty("--scatter-y-start", `${(y * -.18).toFixed(1)}px`);
+          char.style.setProperty("--scatter-r-start", `${(rotation * -.15).toFixed(1)}deg`);
+          char.style.setProperty("--scatter-s-start", `${(skew * -.2).toFixed(1)}deg`);
+          char.style.setProperty("--scatter-x-return", `${(x * -.34).toFixed(1)}px`);
+          char.style.setProperty("--scatter-y-return", `${(y * -.34).toFixed(1)}px`);
+          char.style.setProperty("--scatter-r-return", `${(rotation * -.22).toFixed(1)}deg`);
+          char.style.setProperty("--scatter-s-return", `${(skew * -.25).toFixed(1)}deg`);
+          char.style.setProperty("--delay", `${Math.floor(Math.random() * 115 + (index % 3) * 18)}ms`);
+        });
+        title.classList.remove("is-scattering");
+        void title.offsetWidth;
+        title.classList.add("is-scattering");
+        window.setTimeout(() => title.classList.remove("is-scattering"), 1080);
+      };
+
+      const loop = () => {
+        window.setTimeout(() => {
+          scatter();
+          loop();
+        }, 2600 + Math.random() * 3100);
+      };
+      window.setTimeout(() => {
+        scatter();
+        loop();
+      }, 850);
+    }
+
+    function initIntro() {
+      const lines = [
+        "이건 내가 학교에서 남기는 기록이다.",
+        "밖으로 나가는 길은 아직 찾지 못했다.",
+        "그래도 여기서 본 것과, 알아낸 건 남겨 둔다.",
+        "혹시 이걸 다른 누군가가 읽게 된다면…",
+        "부디, 이 기록이 네가 살아남는 데 도움이 되길 바란다."
+      ];
+      const container = $("#introLines");
+      const enter = $("#enterSite");
+      let lineIndex = 0;
+      let isTyping = false;
+
+      const typeCurrentLine = () => {
+        isTyping = true;
+        enter.classList.remove("ready");
+        enter.disabled = true;
+        container.innerHTML = "";
+
+        const line = document.createElement("p");
+        line.className = `intro-line${lineIndex === lines.length - 1 ? " final-line" : ""}`;
+        const text = document.createElement("span");
+        const caret = document.createElement("span");
+        caret.className = "typing-caret";
+        caret.setAttribute("aria-hidden", "true");
+        line.append(text, caret);
+        container.append(line);
+        requestAnimationFrame(() => line.classList.add("visible"));
+
+        const phrase = lines[lineIndex];
+        let characterIndex = 0;
+        const typeCharacter = () => {
+          text.textContent += phrase[characterIndex++];
+          if (characterIndex < phrase.length) {
+            const previous = phrase[characterIndex - 1];
+            setTimeout(typeCharacter, previous === "," || previous === "…" || previous === "." ? 180 : 48);
+            return;
+          }
+          caret.remove();
+          isTyping = false;
+          enter.textContent = lineIndex === lines.length - 1 ? "열람하기" : "다음";
+          enter.disabled = false;
+          setTimeout(() => enter.classList.add("ready"), 180);
+        };
+        setTimeout(typeCharacter, 250);
+      };
+
+      enter.addEventListener("click", () => {
+        if (isTyping) return;
+        if (lineIndex < lines.length - 1) {
+          lineIndex += 1;
+          typeCurrentLine();
+          return;
+        }
+        playBgm();
+        $("#intro").classList.add("dismiss");
+        document.body.classList.remove("intro-open");
+        document.body.style.overflow = "";
+      });
+
+      setTimeout(typeCurrentLine, 480);
+    }
+
+    renderWorld();
+    renderCharacterTabs();
+    renderCharacters();
+    renderCreatures();
+    initAudio();
+    initFirstInteractionBgm();
+    initTitleScatter();
+    initSceneImageDrag();
+    initIntro();
+  </script>
+</body>
+</html>
